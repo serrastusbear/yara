@@ -1,0 +1,14 @@
+rule vpnfilter_modbus
+{
+	meta:
+		description = "Detection for VPNFilter Modbus Module"
+		author = "Joe Slowik, Dragos Inc."
+		sha256 = "f8286e29faa67ec765ae0244862f6b7914fcdde10423f96595cb84ad5cc6b344"
+	strings:
+		$s1 = "%s/rep_%u.bin" nocase ascii wide 
+		$s2 = "/tmunblock.cgi" nocase ascii wide 
+		$s3 = ".shstrtab" nocase ascii wide 
+		$s4 = "%s:%uh->%s:%hu" nocase ascii wide 
+	condition:
+		uint16(0) == 0x457f and 2 of ($s*)
+}
